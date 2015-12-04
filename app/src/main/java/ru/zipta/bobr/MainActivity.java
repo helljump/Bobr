@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                         int longs = Integer.parseInt(spam[0]) * 60 + Integer.parseInt(spam[1]);
                         spam = pause_et.getText().toString().split(":");
                         int pause = Integer.parseInt(spam[0]) * 60 + Integer.parseInt(spam[1]);
+                        savePrefs();
                         Job j;
                         for (int i = 0; i < times; i++) {
                             j = new Job(JobType.WORK, longs);
@@ -102,18 +103,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        savePrefs();
+        if(tickTask != null) {
+            tickTask.cancel();
+        }
+        running = false;
+        updateFAB();
         super.onPause();
+    }
+
+    private void savePrefs() {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         SharedPreferences.Editor editor = preference.edit();
         editor.putString("long", long_et.getText().toString());
         editor.putString("pause", pause_et.getText().toString());
         editor.putString("repeat", repeat_et.getText().toString());
         editor.apply();
-        running = false;
-        if(tickTask != null) {
-            tickTask.cancel();
-        }
-        updateFAB();
     }
 
     private void LoadRingtone() {
