@@ -49,6 +49,7 @@
         android:text="0:00"
         android:id="@+id/countdown_tv"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="80sp" />
 
 </RelativeLayout>

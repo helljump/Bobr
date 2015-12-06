@@ -2,21 +2,25 @@ package ru.zipta.bobr;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -29,7 +33,7 @@ import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = MainActivity.class.getName();
+    public static final String TAG = MainActivity.class.getSimpleName();
     private FloatingActionButton fab;
     private boolean running = false;
     private Timer timer = new Timer();
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText pause_et;
     private EditText repeat_et;
     private TextView countdown_tv;
+    private View main_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        main_layout = (View) findViewById(R.id.main_layout);
         long_et = (EditText) findViewById(R.id.long_et);
         pause_et = (EditText) findViewById(R.id.pause_et);
         repeat_et = (EditText) findViewById(R.id.repeat_et);
@@ -69,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
                         savePrefs();
                         Job j;
                         for (int i = 0; i < times; i++) {
+                            j = new Job(JobType.PAUSE, pause);
+                            jobs.add(j);
                             j = new Job(JobType.WORK, longs);
                             jobs.add(j);
-                            if (i < times - 1) {
-                                j = new Job(JobType.PAUSE, pause);
-                                jobs.add(j);
-                            }
                         }
                         tickTask = new TickTask();
                         timer.schedule(tickTask, 1000, 1000);
@@ -144,6 +148,17 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "remove " + t.jobType);
             jobs.remove(t);
             ringtone.play();
+            if(!jobs.isEmpty()){
+                Job tt = jobs.get(0);
+                switch (tt.jobType){
+                    case PAUSE:
+                        main_layout.setBackgroundColor(Color.GREEN);
+                        break;
+                    case WORK:
+                        main_layout.setBackgroundColor(Color.RED);
+                        break;
+                }
+            }
         }
         int egg = 0;
         for (Job jj : jobs) {
@@ -162,9 +177,13 @@ public class MainActivity extends AppCompatActivity {
     private void updateFAB() {
         Drawable pd;
         if (running) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            main_layout.setBackgroundColor(Color.RED);
             pd = ContextCompat.getDrawable(MainActivity.this, android.R.drawable.ic_media_pause);
         } else {
             pd = ContextCompat.getDrawable(MainActivity.this, android.R.drawable.ic_media_play);
+            main_layout.setBackgroundColor(Color.WHITE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
         fab.setImageDrawable(pd);
     }
@@ -174,19 +193,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent in = new Intent(this, SettingsActivity.class);
             startActivity(in);
