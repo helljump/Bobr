@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        main_layout = (View) findViewById(R.id.main_layout);
+        main_layout = findViewById(R.id.main_layout);
 
         work_min = (MyNumberPicker) findViewById(R.id.work_min_np);
         work_sec = (MyNumberPicker) findViewById(R.id.work_sec_np);
@@ -106,11 +106,15 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         LoadRingtone();
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        repeats.setValue(preference.getInt("repeat", 7));
-        work_min.setValue(preference.getInt("work_min", 1));
-        work_sec.setValue(preference.getInt("work_sec", 0));
-        pause_min.setValue(preference.getInt("pause_min", 0));
-        pause_sec.setValue(preference.getInt("pause_sec", 3));
+        try {
+            repeats.setValue(preference.getInt("repeat", 7));
+            work_min.setValue(preference.getInt("work_min", 1));
+            work_sec.setValue(preference.getInt("work_sec", 0));
+            pause_min.setValue(preference.getInt("pause_min", 0));
+            pause_sec.setValue(preference.getInt("pause_sec", 3));
+        }catch(ClassCastException ex){
+            //nop
+        }
     }
 
     @Override
