@@ -45,7 +45,7 @@
             custom:max="59"
             custom:value="1"
             android:layout_weight="1"
-            android:gravity="right"/>
+            android:gravity="center"/>
 
         <ru.zipta.bobr.MyNumberPicker
             android:id="@+id/work_sec_np"
@@ -55,7 +55,7 @@
             custom:max="59"
             custom:value="0"
             android:layout_weight="1"
-            android:gravity="left"/>
+            android:gravity="center"/>
 
     </LinearLayout>
 
@@ -80,7 +80,7 @@
             custom:max="59"
             custom:value="1"
             android:layout_weight="1"
-            android:gravity="right"/>
+            android:gravity="center"/>
 
         <ru.zipta.bobr.MyNumberPicker
             android:id="@+id/pause_sec_np"
@@ -90,7 +90,7 @@
             custom:max="59"
             custom:value="0"
             android:layout_weight="1"
-            android:gravity="left"/>
+            android:gravity="center"/>
 
     </LinearLayout>
 

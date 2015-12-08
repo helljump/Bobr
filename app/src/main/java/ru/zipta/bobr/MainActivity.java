@@ -31,6 +31,7 @@ import java.util.TimerTask;
 
 import de.greenrobot.event.EventBus;
 
+// TODO: 08.12.15 записывать 0 если поле времени пустое 
 
 public class MainActivity extends AppCompatActivity {
 
