@@ -42,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private EventBus eventBus = EventBus.getDefault();
     private ArrayList<Job> jobs = new ArrayList<>();
     private Ringtone ringtone;
-    private EditText long_et;
-    private EditText pause_et;
-    private EditText repeat_et;
+    private MyNumberPicker work_min;
+    private MyNumberPicker work_sec;
+    private MyNumberPicker pause_min;
+    private MyNumberPicker pause_sec;
+    private MyNumberPicker repeats;
     private TextView countdown_tv;
     private View main_layout;
 
@@ -55,9 +57,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         main_layout = (View) findViewById(R.id.main_layout);
-        long_et = (EditText) findViewById(R.id.long_et);
-        pause_et = (EditText) findViewById(R.id.pause_et);
-        repeat_et = (EditText) findViewById(R.id.repeat_et);
+
+        work_min = (MyNumberPicker) findViewById(R.id.work_min_np);
+        work_sec = (MyNumberPicker) findViewById(R.id.work_sec_np);
+        pause_min = (MyNumberPicker) findViewById(R.id.pause_min_np);
+        pause_sec = (MyNumberPicker) findViewById(R.id.pause_sec_np);
+        repeats = (MyNumberPicker) findViewById(R.id.times_np);
+
         countdown_tv = (TextView) findViewById(R.id.countdown_tv);
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -69,11 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (!running) {
                         jobs.clear();
-                        int times = Integer.parseInt(repeat_et.getText().toString());
-                        String[] spam = long_et.getText().toString().split(":");
-                        int longs = Integer.parseInt(spam[0]) * 60 + Integer.parseInt(spam[1]);
-                        spam = pause_et.getText().toString().split(":");
-                        int pause = Integer.parseInt(spam[0]) * 60 + Integer.parseInt(spam[1]);
+                        int times = repeats.getValue();
+                        int longs = work_min.getValue() * 60 + work_sec.getValue();
+                        int pause = pause_min.getValue() * 60 + pause_sec.getValue();
                         savePrefs();
                         Job j;
                         for (int i = 0; i < times; i++) {
@@ -102,9 +106,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         LoadRingtone();
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        long_et.setText(preference.getString("long", "1:00"));
-        pause_et.setText(preference.getString("pause", "0:05"));
-        repeat_et.setText(preference.getString("repeat", "6"));
+        repeats.setValue(preference.getInt("repeat", 7));
+        work_min.setValue(preference.getInt("work_min", 1));
+        work_sec.setValue(preference.getInt("work_sec", 0));
+        pause_min.setValue(preference.getInt("pause_min", 0));
+        pause_sec.setValue(preference.getInt("pause_sec", 3));
     }
 
     @Override
@@ -121,9 +127,11 @@ public class MainActivity extends AppCompatActivity {
     private void savePrefs() {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         SharedPreferences.Editor editor = preference.edit();
-        editor.putString("long", long_et.getText().toString());
-        editor.putString("pause", pause_et.getText().toString());
-        editor.putString("repeat", repeat_et.getText().toString());
+        editor.putInt("repeat", repeats.getValue());
+        editor.putInt("work_min", work_min.getValue());
+        editor.putInt("work_sec", work_sec.getValue());
+        editor.putInt("pause_min", pause_min.getValue());
+        editor.putInt("pause_sec", pause_sec.getValue());
         editor.apply();
     }
 
