@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         repeat_et = (EditText) findViewById(R.id.repeat_et);
         countdown_tv = (TextView) findViewById(R.id.countdown_tv);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+
         updateFAB();
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -152,10 +154,10 @@ public class MainActivity extends AppCompatActivity {
                 Job tt = jobs.get(0);
                 switch (tt.jobType){
                     case PAUSE:
-                        main_layout.setBackgroundColor(Color.GREEN);
+                        main_layout.setBackgroundColor(Color.YELLOW);
                         break;
                     case WORK:
-                        main_layout.setBackgroundColor(Color.RED);
+                        main_layout.setBackgroundColor(Color.GREEN);
                         break;
                 }
             }
@@ -178,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         Drawable pd;
         if (running) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            main_layout.setBackgroundColor(Color.RED);
+            main_layout.setBackgroundColor(Color.GREEN);
             pd = ContextCompat.getDrawable(MainActivity.this, android.R.drawable.ic_media_pause);
         } else {
             pd = ContextCompat.getDrawable(MainActivity.this, android.R.drawable.ic_media_play);
