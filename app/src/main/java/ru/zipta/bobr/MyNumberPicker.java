@@ -61,7 +61,12 @@ public class MyNumberPicker extends LinearLayout implements View.OnTouchListener
     }
 
     public int getValue(){
-        return Integer.parseInt(value_et.getText().toString());
+        try {
+            return Integer.parseInt(value_et.getText().toString());
+        } catch (NumberFormatException ex){
+            return 0;
+        }
+
     }
 
     public void setValue(int v){

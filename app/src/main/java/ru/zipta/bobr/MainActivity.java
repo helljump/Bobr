@@ -31,8 +31,6 @@ import java.util.TimerTask;
 
 import de.greenrobot.event.EventBus;
 
-// TODO: 08.12.15 записывать 0 если поле времени пустое 
-// FIXME: 09.12.2015 заменить флаг running на проверку запуска tickTask'a
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     if (!running) {
+                        running = true;
                         jobs.clear();
                         int times = repeats.getValue();
                         int longs = work_min.getValue() * 60 + work_sec.getValue();
@@ -92,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
                         timer.schedule(tickTask, 1000, 1000);
                     } else {
                         tickTask.cancel();
+                        running = false;
                     }
-                    running = !running;
                     updateFAB();
                 } catch (NumberFormatException e) {
                     Snackbar.make(view, "Wrong value", Snackbar.LENGTH_LONG).show();
