@@ -32,6 +32,7 @@ import java.util.TimerTask;
 import de.greenrobot.event.EventBus;
 
 // TODO: 08.12.15 записывать 0 если поле времени пустое 
+// FIXME: 09.12.2015 заменить флаг running на проверку запуска tickTask'a
 
 public class MainActivity extends AppCompatActivity {
 
